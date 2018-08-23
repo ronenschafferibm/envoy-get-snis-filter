@@ -11,15 +11,15 @@ envoy_cc_binary(
     name = "envoy",
     repository = "@envoy",
     deps = [
-        ":get_sni_config",
+        ":get_snis_config",
         "@envoy//source/exe:envoy_main_entry_lib",
     ],
 )
 
 envoy_cc_library(
-    name = "get_sni_lib",
-    srcs = ["get_sni.cc"],
-    hdrs = ["get_sni.h"],
+    name = "get_snis_lib",
+    srcs = ["get_snis.cc"],
+    hdrs = ["get_snis.h"],
     repository = "@envoy",
     deps = [
         "@envoy//include/envoy/buffer:buffer_interface",
@@ -31,30 +31,13 @@ envoy_cc_library(
 )
 
 envoy_cc_library(
-    name = "get_sni_config",
-    srcs = ["get_sni_config.cc"],
+    name = "get_snis_config",
+    srcs = ["get_snis_config.cc"],
     repository = "@envoy",
     deps = [
-        ":get_sni_lib",
+        ":get_snis_lib",
         "@envoy//include/envoy/network:filter_interface",
         "@envoy//include/envoy/registry:registry",
         "@envoy//include/envoy/server:filter_config_interface",
     ],
-)
-
-envoy_cc_test(
-    name = "get_sni_integration_test",
-    srcs = ["get_sni_integration_test.cc"],
-    data =  ["get_sni_server.yaml"],
-    repository = "@envoy",
-    deps = [
-        ":get_sni_config",
-        "@envoy//test/integration:integration_lib"
-    ],
-)
-
-sh_test(
-    name = "envoy_binary_test",
-    srcs = ["envoy_binary_test.sh"],
-    data = [":envoy"],
 )
