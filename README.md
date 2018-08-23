@@ -48,3 +48,44 @@ $ ./envoy/ci/run_envoy_docker.sh './ci/do_ci.sh build'
 3. Push the image to the hub
 
 ```docker push ronensch/envoy-get-snis-filter```
+
+## Running
+
+1. Run first instance of envoy
+    ```
+    envoy -c ./envoy_config.json --v2-config-only
+    ```
+
+1. From a new terminal, run a second instance of envoy
+    ```
+    envoy -c envoy_config2.json --v2-config-only --base-id 2
+    ```
+
+1. From a new terminal make a request to the first envoy
+    ```
+    curl -Ivk https://edition.cnn.com --resolve edition.cnn.com:443:127.0.0.1
+    ```
+
+
+1. In the second envoy's log, one can spot the inner SNI `edition.cnn.com` while the outer SNI is `envoy2.local`
+    ```
+    [2018-08-23 17:49:26.383][28869][info][filter] get_snis.cc:12] GetSNIsFilter:onNewConnection(), connection requestedServerName: envoy2.local
+    [*** LOG ERROR ***] [2018-08-23 17:49:26] [filter] string pointer is null
+    [2018-08-23 17:49:26.450][28869][info][filter] get_snis.cc:18] GetSNIsFilter:onData(), connection requestedServerName: envoy2.local
+    [2018-08-23 17:49:26.450][28869][info][filter] get_snis.cc:19] GetSNIsFilter:onData(), network level requestedServerName: edition.cnn.com
+    [2018-08-23 17:49:26.519][28869][info][filter] get_snis.cc:18] GetSNIsFilter:onData(), connection requestedServerName: envoy2.local
+    [2018-08-23 17:49:26.520][28869][info][filter] get_snis.cc:19] GetSNIsFilter:onData(), network level requestedServerName: edition.cnn.com
+    [2018-08-23 17:49:26.584][28869][info][filter] get_snis.cc:18] GetSNIsFilter:onData(), connection requestedServerName: envoy2.local
+    [2018-08-23 17:49:26.584][28869][info][filter] get_snis.cc:19] GetSNIsFilter:onData(), network level requestedServerName: edition.cnn.com
+    [2018-08-23 17:49:26.652][28869][info][filter] get_snis.cc:18] GetSNIsFilter:onData(), connection requestedServerName: envoy2.local
+    [2018-08-23 17:49:26.652][28869][info][filter] get_snis.cc:19] GetSNIsFilter:onData(), network level requestedServerName: edition.cnn.com
+    [2018-08-23 17:49:26.652][28869][info][filter] get_snis.cc:18] GetSNIsFilter:onData(), connection requestedServerName: envoy2.local
+    [2018-08-23 17:49:26.652][28869][info][filter] get_snis.cc:19] GetSNIsFilter:onData(), network level requestedServerName: edition.cnn.com
+    [2018-08-23T14:49:26.383Z] "- - -" 0 - 783 6642 333 - "-" "-" "-" "-" "151.101.1.67:443"
+    ```
+
+
+# How it works
+The first envoy redirects its traffic to the second envoy which listens on port 15002.
+The second envoy sends the traffic to `cnn.com`
+
