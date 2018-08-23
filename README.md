@@ -14,14 +14,7 @@ The SNI of the network level is populated by `GetSNIsFilter` network filter.
 git submodule update --init
 ```
 
-2. Checkout the branch of envoy with network_level_sni_reader filter
-```
-cd envoy
-git checkout inner-sni-reader
-cd -
-```
-
-3. Replace line 5 in [`envoy-get-sni-filter/envoy/ci/run_envoy_docker.sh`](https://github.com/envoyproxy/envoy/blob/5ec8b37da9de5893c04f75bbf2820014c62ea529/ci/run_envoy_docker.sh#L5):
+1. Replace line 5 in [`envoy-get-sni-filter/envoy/ci/run_envoy_docker.sh`](https://github.com/envoyproxy/envoy/blob/5ec8b37da9de5893c04f75bbf2820014c62ea529/ci/run_envoy_docker.sh#L5):
 ```
 . ci/envoy_build_sha.sh
 ```
@@ -31,10 +24,10 @@ SCRIPT_DIR_PATH="`dirname \"$0\"`"
 . "$SCRIPT_DIR_PATH"/envoy_build_sha.sh
 ```
 
-4. Set the output build dir path:
+1. Set the output build dir path:
 ``` export ENVOY_DOCKER_BUILD_DIR=~/envoyproxy/envoy-get-snis-filter/build```
 
-5. Build the example with docker by running the script `'./ci/do_ci.sh build'` inside docker:
+1. Build the example with docker by running the script `'./ci/do_ci.sh build'` inside docker:
 ```
 $ pwd
 ~/envoyproxy/envoy-get-snis-filter
