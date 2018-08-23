@@ -54,4 +54,4 @@ $ ./envoy/ci/run_envoy_docker.sh './ci/do_ci.sh build'
 
 3. Push the image to the hub
 
-```docker push ronensch/envoy-get-snis-filter .```
+```docker push ronensch/envoy-get-snis-filter```
