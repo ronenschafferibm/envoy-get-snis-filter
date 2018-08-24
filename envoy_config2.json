@@ -69,52 +69,6 @@
                 }
               }
             ]
-          },
-          {
-            "filter_chain_match": {
-              "server_names": "*.cnn.com"
-            },
-            "tlsContext": {
-            "commonTlsContext": {
-              "tlsCertificates": [
-                {
-                  "certificateChain": {
-                    "filename": "/etc/my-envoy-certs/envoy2.crt"
-                  },
-                  "privateKey": {
-                    "filename": "/etc/my-envoy-certs/envoy2.key"
-                  }
-                }
-              ],
-              "validationContext": {
-                "trustedCa": {
-                  "filename": "/etc/my-envoy-certs/envoy1.crt"
-                }
-              },
-              "alpnProtocols": [
-                "h2",
-                "http/1.1"
-              ]
-            },
-            "requireClientCertificate": true
-          },
-            "filters": [
-              {
-                "name": "envoy.tcp_proxy",
-                "config": {
-                  "stat_prefix": "cnn",
-                  "access_log": [
-                    {
-                      "config": {
-                        "path": "/dev/stdout"
-                      },
-                      "name": "envoy.file_access_log"
-                    }
-                  ],
-                  "cluster": "cnn"
-                }
-              }
-            ]
           }
         ]
       }
